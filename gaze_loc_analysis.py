@@ -28,7 +28,7 @@ eye_move_dists = [0]
 gaze_loc = [[0,0]]
 gaze_loc_x = [0]
 gaze_loc_y = [0]
-for i in range(1, 100): #len(pitches)):
+for i in range(1, 150):#len(pitches)):
     d_x = (pitches[i] - pitches[i-1])
     d_y = (yaws[i] - yaws[i-1])
     eye_move_dists.append(math.sqrt((d_x*d_x) + (d_y*d_y))) # Distance moved of the eyes at each time step
@@ -36,14 +36,28 @@ for i in range(1, 100): #len(pitches)):
     gaze_loc_x.append(gaze_loc_x[i-1] + d_x)
     gaze_loc_y.append(gaze_loc_y[i-1] + d_y)
 
+
+fixation_indices = [24, 41, 48, 120, 130, 147, 153, 162, 164, 174, 179, 185, 189, 197, 289, 295, 309, 335, 345, 373, 379, 385, 396, 399, 404, 412, 429, 434, 437, 441, 443, 447, 455, 464, 466, 474, 479, 482, 488, 493, 499, 504, 537, 543, 578, 637, 640, 688, 801, 828, 861, 877, 923, 939, 949, 970, 984, 992]
+fixation_point_x = []
+fixation_point_y = []
+for i in fixation_indices:
+    if (i > 150):
+        break
+    fixation_point_x.append(gaze_loc_x[i])
+    fixation_point_y.append(gaze_loc_y[i])
+
 # slope = pd.Series(np.gradient(pitches), times, name='slope')
 # dists = pd.Series(eye_move_dists, times, name='dists')
 # vals = pd.Series(pitches, times, name='pitches')
+
 locs = pd.Series(gaze_loc_x, gaze_loc_y, name='loc')
+locs2 = pd.Series(fixation_point_x, fixation_point_y, name='loc2')
+
 #slope = pd.Series([1,2,3], [1,2,3])
 fig = plt.figure()
 plt.isinteractive = False
-plt.plot(locs.index, locs.values, '-p', label='loc')
+plt.plot(locs.index, locs.values, '-p', label='fix')
+plt.plot(locs2.index, locs2.values, '-r', label='loc')
 # plt.plot(dists.index, dists.values, "-b", label='dist')
 # plt.plot(slope.index, slope.values, "-r", label='derivative pitch')
 # plt.plot(vals.index, vals.values, "-g", label='pitches')
